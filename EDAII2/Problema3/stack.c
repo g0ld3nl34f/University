@@ -23,6 +23,11 @@ struct stack *new_stack()
 	return new;
 }
 
+int get_top_stack(struct stack *stack)
+{
+	return stack -> top;
+}
+
 int peek_stack(struct stack *stack)
 {
 	return stack -> array[stack -> top];

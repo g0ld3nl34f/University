@@ -73,22 +73,20 @@ void reverse_polish_notation_calculator(char to_calculate[], struct stack *rpn)
 
 int main()
 {
-	char to_calculate[3] = {'2', '1', '+'};
+	char to_calculate[SIZE];
 	struct stack *rpn = new_stack();
 
-	reverse_polish_notation_calculator(to_calculate, rpn);
-
-	/*while (scanf("%s", &to_calculate) != EOF)
+	while (scanf("%s", to_calculate) != EOF)
 	{
 		reverse_polish_notation_calculator(to_calculate, rpn);
 
-		if (rpn -> top != -1)
+		if (get_top_stack(rpn) != -1)
 		{
-			printf("%d\n", rpn -> array[rpn -> top]);
-			rpn -> top = -1;
+			printf("%d\n", peek_stack(rpn));
+			set_empty_stack(rpn);
 		}
 
-	}*/
+	}
 
 	free_stack(rpn);
 
