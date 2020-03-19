@@ -6,23 +6,6 @@ struct node
     struct node *next;
 };
 
-struct node *new_node(int second_element)
-{
-    struct node *new = malloc(sizeof(struct node));
-
-    new -> second_element = second_element;
-    new -> next = NULL;
-
-    return new;
-}
-
-void destroy_node(struct node *this_node)
-{
-    free(this_node);
-
-    return;
-}
-
 struct list
 {
     short size;
@@ -44,6 +27,11 @@ struct list *new_list(int first_element)
 short get_size_list(struct list *this_list)
 {
     return this_list -> size;
+}
+
+struct node *get_head_list(struct list *this_list)
+{
+	return this_list -> head;
 }
 
 _Bool element_in_list(struct list *this_list, int second_element)
@@ -75,34 +63,24 @@ void insert_node_in_list(struct list *this_list, int second_element)
         return;
     }
     
-    struct node *to_insert = new_node(second_element);
-    
-    struct node *current = this_list -> head;
+	struct node *current = this_list -> head; 
 
-    if (current == NULL)
-    {
-        this_list -> head = to_insert;
-        this_list -> size++;
-        
-        return;
-    }
+    if (this_list -> size == EMPTY_LIST)
+	{
+		this_list -> head = malloc(sizeof(struct node));
+		this_list -> head -> second_element = second_element;
+		this_list -> head -> next = NULL;
+		this_list -> size++;
 
-    if (current -> next == NULL)
-    {
-        current -> next = to_insert;
-        this_list -> size++;
+		return;
+	}
 
-        return;
-    }
-    
-    while (current -> next != NULL)
-    {
-        current = current -> next;
-    }
-        
-    current -> next = to_insert;
-    this_list -> size++;
-    
+	struct node *to_insert = malloc(sizeof(struct node));
+	this_list -> head = to_insert;
+	to_insert -> second_element = second_element;
+	to_insert -> next = current;
+	this_list -> size++;
+
     return;
 }
 
@@ -117,7 +95,7 @@ void destroy_node_in_list(struct list *this_list, int second_element)
 
     if (current -> next == NULL)
     {
-        destroy_node(current);
+        free(current);
         this_list -> size--;
         return;
     }
@@ -126,9 +104,11 @@ void destroy_node_in_list(struct list *this_list, int second_element)
 
     if (current -> second_element == second_element)
     {
-        destroy_node(current);
+        free(current);
         this_list -> size--;
         this_list -> head = temporary;
+
+		return;
     }
 
     temporary = temporary -> next;
@@ -139,26 +119,23 @@ void destroy_node_in_list(struct list *this_list, int second_element)
         temporary = temporary -> next;
     }
 
-    destroy_node(current -> next);
+    free(current -> next);
     this_list -> size--;
     current -> next = temporary;
 
     return;
 }
 
-void print_list(struct list *this_list)
+void print_list(struct node *current)
 {
-    struct node *current = this_list -> head;
+	if (current -> next != NULL)
+	{
+		print_list(current -> next);
+	}
 
-    while (current -> next != NULL)
-    {
-        printf("%d ", current -> second_element);
-        current = current -> next;
-    }
+	printf(" %d", current -> second_element);
 
-    printf("%d", current -> second_element);
-    
-    return;
+	return;
 }
 
 void destroy_list(struct list *this_list)
@@ -173,33 +150,21 @@ void destroy_list(struct list *this_list)
 
     if (current -> next == NULL)
     {
-        destroy_node(current);
+        free(current);
         free(this_list);
         return;
     }
 
     struct node *temporary = current -> next;
 
-    while (current != NULL)
+    while (temporary != NULL)
     {
-        destroy_node(current);
+        free(current);
         current = temporary;
         temporary = temporary -> next;
     }
-    
+
+	free(current);
     free(this_list);
     return;
-}
-
-int main()
-{
-    struct list *test = new_list(1);
-
-    insert_node_in_list(test, 0);
-
-    insert_node_in_list(test, 1);
-
-    destroy_list(test);
-    
-    return 0;
 }
