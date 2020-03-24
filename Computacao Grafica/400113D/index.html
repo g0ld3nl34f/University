@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8"/>
+		<script type = 'text/javascript' src = 'lib/x3dom/x3dom-full.js'>
+        </script>
+        <link rel="stylesheet" href="../style/style.css" type="text/css">
+        <link rel='stylesheet' type='text/css' href='layout/format_settings.css' />
+    </head>
+    <body>
+        <header>Trabalho 3D &#9203; Pedro Louro &#8987; Aluno Nº40011</header>
+        <table>
+            <tr>
+                <th> Original </th>
+                <th> Reprodução</th>
+            </tr>
+            <tr>
+            <td><img src = "media/grandfather_clock.jpg" style="max-width: 100%; height: 450px"></img></td>
+            <td>
+        	<x3d width = "500px" height = "500px">
+        		<scene>
+        			<background skyColor = "1 1 1">
+        			</background>
+        			<switch whichChoice = "-1">
+        				
+                        <CommonSurfaceShader DEF = "face">
+                            <ImageTexture containerField = "diffuseTexture" url = "media/wooded_face.jpg">
+                            </ImageTexture>
+                        </CommonSurfaceShader>
+
+                        <CommonSurfaceShader DEF = "wood">
+                            <ImageTexture containerField = "diffuseTexture" url = "media/wood.jpg">
+                            </ImageTexture>
+                        </CommonSurfaceShader>
+
+                        <CommonSurfaceShader DEF = "gold">
+                            <ImageTexture containerField = "diffuseTexture" url = "media/gold.jpeg">
+                            </ImageTexture>
+                        </CommonSurfaceShader>
+
+        				<extrusion
+        					id = "body"
+        					convex = "false"
+        					crossSection = "
+        						-1.0 -1.0
+        						-1.0 1.0
+        						1.0 1.0
+        						1.0 -1.0"
+        					spine = "
+        						0.0 2.0 0.0
+        						0.0 0.0 0.0
+        						0.0 -2.0 0.0"
+        					scale = "
+        						1.0 1.0
+        						1.0 1.0
+        						1.0 1.0">
+        				</extrusion>
+
+        				<indexedfaceset 
+        					id = "clock_face"
+        					coordIndex = "
+        					0 1 2 3 0 -1">
+        					<coordinate
+        						point ="
+        						1.0 -1.0 0.0
+        						1.0 1.0 0.0
+        						-1.0 1.0 0.0
+        						-1.0 -1.0 0.0">
+        					</coordinate>
+        				</indexedfaceset>
+
+        				<extrusion
+        					id = "top"
+        					convex = "false"
+        					crossSection = "
+        						-1.0 -1.0
+                                1.0 -1.0
+                                1.0 1.0
+                                -1.0 1.0
+                                -1.0 -1.0"
+        					spine = "
+        						0.0 2.0 0.0
+        						0.0 0.0 0.0"
+        					scale = "
+        						0.0 0.0
+        						1.0 1.0">
+        				</extrusion>
+
+                        <extrusion
+                            id = "clock_hand"
+                            convex = "false"
+                            crossSection = "
+                                0.0 -1.0
+                                -0.5 -0.5
+                                -0.2 -0.5
+                                -0.2 1.0
+                                0.2 1.0
+                                0.2 -0.5
+                                0.5 -0.5
+                                0.0 -1.0"
+                            spine = "
+                                0.0 0.0 0.0
+                                0.0 0.3 0.0"
+                            scale = "
+                                1.0 1.0
+                                1.0 1.0">
+                        </extrusion>
+        			
+        			</switch>
+
+        			<transform id = "clock" translation = "0.0 -1 0.0" scale = "0.8 0.9 0.8" rotation = "0 1 0 -0.2">
+        				<!--Corpo-->
+        				<transform translation = "0.0 0.0 0.0" scale = "0.8 1.0 -0.8">
+        					<shape>
+        						<appearance>
+        							<twosidedmaterial diffuseColor = "brown"></twosidedmaterial>
+        						</appearance>
+        						<x3dgeometrynode use = "body"></x3dgeometrynode>
+        					</shape>
+        				</transform>
+
+        				<transform translation = "0.0 0.0 0.0" scale = "0.7 0.9 -0.7">
+        					<shape>
+        						<appearance>
+        							<twosidedmaterial diffuseColor = "brown"></twosidedmaterial>
+        						</appearance>
+        						<x3dgeometrynode use = "body"></x3dgeometrynode>
+        					</shape>
+        				</transform>
+
+                        <transform translation = "0.0 1.8 0.8" scale = "0.7 0.1 0.2">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                </appearance>
+                                <x3dgeometrynode use = "body"></x3dgeometrynode>
+                            </shape>
+                        </transform>
+
+                        <transform translation = "0.0 3.55 0.8" scale = "0.7 0.03 0.2">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                </appearance>
+                                <x3dgeometrynode use = "body"></x3dgeometrynode>
+                            </shape>
+                        </transform>
+
+                        <transform translation = "0.0 -1.8 0.8" scale = "0.8 0.1 0.2">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                </appearance>
+                                <x3dgeometrynode use = "body"></x3dgeometrynode>
+                            </shape>
+                        </transform>
+
+                        <transform rotation = "0 1 0 1.57">
+                            <transform translation = "0.00 0.6 0.8" scale = "0.845 1.5 0.05">      
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <x3dgeometrynode use = "body"></x3dgeometrynode>
+                                </shape>
+                            </transform>
+                        </transform>
+
+                        <transform rotation = "0 1 0 -1.57">
+                            <transform translation = "0.00 0.6 0.8" scale = "0.845 1.5 0.05">      
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <x3dgeometrynode use = "body"></x3dgeometrynode>
+                                </shape>
+                            </transform>
+                        </transform>
+
+                        <transform rotation = "0 1 0 3.14">
+                            <transform translation = "0.0 0.6 0.8" scale = "0.849 1.5 0.05">      
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <x3dgeometrynode use = "body"></x3dgeometrynode>
+                                </shape>
+                            </transform>
+                        </transform>
+
+                        <transform rotation = "1 0 0 -1.57">
+                            <transform translation = "0.0 0.0 -1.79" scale = "0.84 0.7 0.8">
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <x3dgeometrynode use = "clock_face"></x3dgeometrynode>
+                                </shape>
+                            </transform>
+                        </transform>
+
+                        <transform rotation = "1 0 0 1.57">
+                            <transform translation = "0.0 0.0 -1.69" scale = "0.84 0.7 0.8">
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <x3dgeometrynode use = "clock_face"></x3dgeometrynode>
+                                </shape>
+                            </transform>
+                        </transform>
+
+                        <transform rotation = "0 1 0 1.57">
+                            <transform translation = "0.0 0.0 -0.69" scale = "0.84 2.0 0.8">
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <x3dgeometrynode use = "clock_face"></x3dgeometrynode>
+                                </shape>
+                            </transform>
+                        </transform>
+
+                        <transform rotation = "0 1 0 -1.57">
+                            <transform translation = "0.0 0.0 -0.69" scale = "0.84 2.0 0.8">
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <x3dgeometrynode use = "clock_face"></x3dgeometrynode>
+                                </shape>
+                            </transform>
+                        </transform>
+
+                        <transform translation = "0.0 0.0 -0.69" scale = "0.84 2.0 0.8">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                </appearance>
+                                <x3dgeometrynode use = "clock_face"></x3dgeometrynode>
+                            </shape>
+                        </transform>
+                        
+
+                        <!--Colunas-->
+        				<transform translation = "0.75 0.0 0.9" scale = "0.6 2.0 0.6">
+        					<shape>
+        						<appearance>
+        							<X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+        						</appearance>
+        						<cylinder radius = "0.2"></cylinder>
+        					</shape>
+        				</transform>
+
+                        <transform translation = "-0.75 0.0 0.9" scale = "0.6 2.0 0.6">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                </appearance>
+                                <cylinder radius = "0.2"></cylinder>
+                            </shape>
+                        </transform>
+
+                        <transform translation = "-0.75 1.6 0.9" scale = "0.6 2.0 0.6">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                </appearance>
+                                <cylinder radius = "0.2"></cylinder>
+                            </shape>
+                        </transform>
+
+                        <transform translation = "0.75 1.6 0.9" scale = "0.6 2.0 0.6">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                </appearance>
+                                <cylinder radius = "0.2"></cylinder>
+                            </shape>
+                        </transform>
+                        <!--Base do Relogio-->
+        				<transform translation = "0.0 2.801 0.0" scale = "0.8 0.8 0.8">
+        					<shape>
+        						<appearance>
+        							<X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+        						</appearance>
+        						<box></box>
+        					</shape>
+        				</transform>
+
+                        <transform translation = "0.0 2.801 0.801" scale = "0.6 0.7 0.8">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "face"></X3DAppearanceChildNode>
+                                </appearance>
+                                <x3dgeometrynode use = "clock_face"></x3dgeometrynode>
+                            </shape>
+                        </transform>
+
+                        <transform translation = "0.0 2.80 0.85" scale = "0.1 0.2 0.20" rotation = "1 0 0 1.565">
+                            <shape>
+                                <appearance>
+                                   <X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+                                </appearance>
+                                <x3dgeometrynode use = "clock_hand"></x3dgeometrynode>
+                            </shape>
+                        </transform>
+
+                        <transform rotation = "0 0 1 1.90">
+                            <transform translation = "2.48 -0.75 0.85" scale = "0.1 0.2 0.10" rotation = "1 0 0 1.565">
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <x3dgeometrynode use = "clock_hand"></x3dgeometrynode>
+                                </shape>
+                            </transform>
+                        </transform>
+
+
+                        <transform translation = "-0.0 2.60 0.85" scale = "1 1 1" rotation = "1 0 0 1.565">
+                             <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+                                </appearance>
+                                <sphere radius = "0.08"></sphere>
+                            </shape>
+                        </transform>
+                        
+        				
+                        <!--Topo-->
+    	    			<transform translation = "0.0 3.6005 0.0" scale = "0.8 0.8 0.8">
+    	    				<shape>
+    	    					<appearance>
+    	    						<X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+    	    					</appearance>
+    	    					<x3dgeometrynode use = "top"></x3dgeometrynode>
+    	    				</shape>
+    	    			</transform>
+
+                        <transform translation = "0.0 3.6005 0.0" scale = "1 0.02 1">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                </appearance>
+                                <box></box>
+                            </shape>
+                        </transform>
+
+
+    	    			<!--Cilindros em frente ao pendulo-->
+                        <transform id = "cylinders">
+            				<transform translation = "0.0 0.8 0.3" scale = "0.3 0.6 0.3">
+            					<shape>
+            						<appearance>
+            							<X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+            						</appearance>
+           							<cylinder radius = "0.5"></cylinder>
+           						</shape>
+           					</transform>
+
+                            <transform translation = "0.0 1.8 0.3" scale = "0.3 0.6 0.3">
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <cylinder radius = "0.01"></cylinder>
+                                </shape>
+                            </transform>
+
+           					<transform translation = "-0.5 0.6 0.3" scale = "0.3 0.6 0.3">
+            					<shape>
+            						<appearance>
+            							<X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+            						</appearance>
+           							<cylinder radius = "0.5"></cylinder>
+           						</shape>
+           					</transform>
+                        
+
+                            <transform translation = "-0.5 1.8 0.3" scale = "0.3 0.6 0.3">
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <cylinder radius = "0.01"></cylinder>
+                                </shape>
+                            </transform>
+
+           					<transform translation = "0.5 0.6 0.3" scale = "0.3 0.6 0.3">
+            					<shape>
+            						<appearance>
+            							<X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+            						</appearance>
+           							<cylinder radius = "0.5"></cylinder>
+           						</shape>
+           					</transform>
+
+                            <transform translation = "0.5 1.8 0.3" scale = "0.3 0.6 0.3">
+                                <shape>
+                                    <appearance>
+                                        <X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+                                    </appearance>
+                                    <cylinder radius = "0.01"></cylinder>
+                                </shape>
+                            </transform>
+                        </transform>
+
+
+                        <!--Stand-->
+                        <transform translation = "0.0 -2.2001 0.1" scale = "1.0 0.2 1.0">
+                            <shape>
+                                <appearance>
+                                    <X3DAppearanceChildNode use = "wood"></X3DAppearanceChildNode>
+                                </appearance>
+                                <box></box>
+                            </shape>
+                        </transform>
+        			</transform>
+
+                <!--Pendulo-->
+                <transform translation = "0.0 0.8 0.0" scale = "0.8 0.8 0.8" rotation = "0 1 0 -0.2">
+                    <transform translation = "0.0 -1.001 -0.3" scale = "0.4 0.4 0.4">
+                            <transform id = "upper">
+                                <transform rotation = "0 0 1 3.15">
+                                    <transform translation = "0.0 1.0 0.0" scale = "1.0 3.0 0.2">
+                                        <shape>
+                                            <appearance>
+                                                <X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+                                            </appearance>
+                                            <cylinder radius = "0.2"></cylinder>
+                                        </shape>
+                                    </transform>
+                                </transform>
+                            </transform>
+
+                            <transform id = "under">
+                               <transform translation = "0.0 -5.0 0.0" scale = "1.0 1.0 0.2">    
+                                    <shape>
+                                        <appearance>
+                                            <X3DAppearanceChildNode use = "gold"></X3DAppearanceChildNode>
+                                        </appearance>
+                                        <sphere></shpere>
+                                    </shape>
+                                </transform>
+                            </transform>
+                        </transform>
+                </transform>
+
+                <TimeSensor DEF = "clockCyclePendulum" cycleInterval = "2.2" loop = "true"></TimeSensor>
+                <TimeSensor DEF = "clockCycleCylinders" cycleInterval = "6" loop = "true"></TimeSensor>
+
+                <OrientationInterpolator DEF = "sidewaving" key = "0.00 0.25 0.75 1.00" keyValue = "
+                    0 0 1 0
+                    0 0 1 0.15
+                    0 0 1 -0.15
+                    0 0 1 0">
+                        
+                </OrientationInterpolator>
+
+                <PositionInterpolator DEF = "position" key = "0.0 0.25 0.5 0.75 1.00" keyValue = "
+                    0 0.1 0
+                    0.7 0.2 0
+                    0 0.1 0
+                    -0.7 0.2 0
+                    0 0.1 0">        
+                </PositionInterpolator>
+
+                </OrientationInterpolator>
+
+                <PositionInterpolator DEF = "position_cylinder" key = "0.0 0.25 0.5 0.75 1.00" keyValue = "
+                    0.0 0.0 0.0
+                    0.0 0.1 0.0
+                    0.0 0.0 0.0
+                    0.0 -0.1 0.0
+                    0.0 0.0 0.0">        
+                </PositionInterpolator>
+
+                <Route fromNode="clockCyclePendulum" fromField="fraction_changed" toNode="sidewaving" toField="set_fraction">
+                </Route>
+                <Route fromNode="sidewaving" fromField="value_changed" toNode="upper" toField="rotation">
+                </Route>
+
+                <Route fromNode="clockCyclePendulum" fromField="fraction_changed" toNode="position" toField="set_fraction">
+                </Route>    
+                <Route fromNode="position" fromField="value_changed" toNode="under" toField="translation">
+                </Route>
+
+                <Route fromNode="clockCycleCylinders" fromField="fraction_changed" toNode="position_cylinder" toField="set_fraction">
+                </Route>    
+                <Route fromNode="position_cylinder" fromField="value_changed" toNode="cylinders" toField="translation">
+                </Route> 
+
+        		</scene>
+        	</x3d>
+            </td>
+        </table>
+            <footer> Computação Gráfica &#9203; Engenharia Informática &#8987; 2018/2019</footer>
+    </body>
+</html>
