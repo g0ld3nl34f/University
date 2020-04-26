@@ -12,6 +12,10 @@ import java.util.*;
  * @author l40011
  */
 public interface Availability extends java.rmi.Remote{
+    public void initializeAvailabilityDataBase() throws java.rmi.RemoteException;
+    
+    public void initializeRequestsDataBase() throws java.rmi.RemoteException;
+    
     public Vector<String> checkAvailability() throws java.rmi.RemoteException;
     
     public Vector<String> checkNecessities() throws java.rmi.RemoteException;

@@ -29,7 +29,8 @@ public class AvailabilityClient {
             String lineRead;
             
             while ((lineRead = br.readLine()) != null){
-                if (lineRead.equals("3")) {
+                if (lineRead.equals("4")) {
+                    System.out.println(lineRead);
                     if((lineRead = br.readLine()) != null) {
                         System.out.println(lineRead);
                         
@@ -44,15 +45,18 @@ public class AvailabilityClient {
 
                                 if (availability.requestAvailability(checkProduct[1])) {
                                     Vector<String> shopsAvailableAt = availability.getShops(checkProduct[1]);
-                                    System.out.println(shopsAvailableAt);
 
-                                    System.out.print("> Product available at: " + shopsAvailableAt.get(0));
+                                    System.out.print("> Product available at these shops: " + shopsAvailableAt.get(0));
 
                                     for (int i = 1; i < shopsAvailableAt.size(); i++) {
                                         System.out.print(", " + shopsAvailableAt.get(i));
                                     }
 
                                     System.out.println(".");
+                                }
+                                
+                                else {
+                                    System.out.println("> " + checkProduct[1] + " still not available.");
                                 }
                             }
                             
@@ -100,10 +104,12 @@ public class AvailabilityClient {
 
             if (request != null) {
                 for (int i = 0; i < request.size(); i++) {
-                    System.out.println(request.get(i));
-                    fw.write((request.get(i) + "\n").getBytes());
+                    System.out.println("> " + request.get(i));
+                    fw.write(("> " + request.get(i) + "\n").getBytes());
                 }
             }
+            
+            System.out.println();
         }
         
         catch (IOException e) {
@@ -122,14 +128,56 @@ public class AvailabilityClient {
 
             if (request != null) {
                 for (int i = 0; i < request.size(); i++) {
-                    System.out.println(request.get(i));
-                    fw.write((request.get(i) + "\n").getBytes());
+                    System.out.println("> " + request.get(i));
+                    fw.write(("> " + request.get(i) + "\n").getBytes());
                 }
+            }
+            
+            System.out.println();
+        }
+        
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static void getProductAvailability(Availability availability, DataOutputStream fw) throws java.rmi.RemoteException {
+        try {
+            String prompt = "> What product are you looking for?";
+            System.out.println(prompt);
+            fw.write((prompt + "\n").getBytes());
+            
+            Scanner scan = new Scanner(System.in);
+            prompt = ">> ";
+            System.out.print(prompt);
+            String product = scan.nextLine();
+            fw.write((prompt + product + "\n").getBytes());
+            
+            if (availability.requestAvailability(product)) {
+                Vector<String> shopsAvailableAt = availability.getShops(product);
+                prompt = "> Product available at these shops: ";
+                
+                System.out.print(prompt + shopsAvailableAt.get(0));
+                fw.write((prompt + shopsAvailableAt.get(0)).getBytes());
+                
+                for (int i = 1; i < shopsAvailableAt.size(); i++) {
+                    System.out.print(", " + shopsAvailableAt.get(i));
+                    fw.write((", " + shopsAvailableAt.get(i)).getBytes());
+                }
+
+                System.out.println(".\n");
+                fw.write((".\n\n").getBytes());
+            }
+            
+            else {
+                prompt = "> " + product + " not found at any shop.\n";
+                System.out.println(prompt);
+                fw.write((prompt).getBytes());
             }
         }
         
         catch (IOException e) {
-            
+            e.printStackTrace();
         }
     }
     
@@ -149,7 +197,7 @@ public class AvailabilityClient {
             boolean anwser = availability.requestAvailability(product);
 
             if (anwser) {
-                prompt = "> " + product + " already available.";
+                prompt = "> " + product + " already available.\n";
                 System.out.println(prompt);
                 fw.write((prompt + "\n").getBytes());
 
@@ -159,7 +207,7 @@ public class AvailabilityClient {
             AvailabilityNotification an = new AvailabilityNotification(host, serverPort, username, product);
             an.start();
 
-            prompt = "> " + product + " requested.";
+            prompt = "> " + product + " requested.\n";
             System.out.println(prompt);
             fw.write((prompt + "\n").getBytes());
         }
@@ -198,7 +246,7 @@ public class AvailabilityClient {
                 System.out.println(prompt);
                 fw.write((prompt + "\n").getBytes());
 
-                prompt = "> Thank you for your cooperation.";
+                prompt = "> Thank you for your cooperation.\n";
                 System.out.println(prompt);
                 fw.write((prompt + "\n").getBytes());
 
@@ -215,12 +263,12 @@ public class AvailabilityClient {
 
                 catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("Cound't notify server about availability");
+                    System.out.println("> Cound't notify server about availability\n");
                 }
             }
 
             else {
-                prompt = "> " +product + " already available or something went wrong.";
+                prompt = "> " +product + " already available or something went wrong.\n";
                 System.out.println(prompt);
                 fw.write((prompt + "\n").getBytes());
             }
@@ -233,12 +281,24 @@ public class AvailabilityClient {
         
     }
     
+    public static void listCommands() {
+        System.out.println("> MENU:");
+        System.out.println("> '1' - List available products and their locations.");
+        System.out.println("> '2' - List products requested by users.");
+        System.out.println("> '3' - List shops where the product you're looking for is available.");
+        System.out.println("> '4' - Request a product you need.");
+        System.out.println("> '5' - Inform other users where you found a product.");
+        System.out.println("> 'q' - Quit programm.");
+    }
+    
     //Add option to add more products or more shops where the product is available
     public static void menu(Availability availability, String host, String serverPort, String username, File session) throws java.rmi.RemoteException {
         try{
             DataOutputStream fw = new DataOutputStream(new FileOutputStream(session));
             Scanner scan = new Scanner(System.in);
             String command, prompt = ">> ";
+            
+            listCommands();
 
             while (true) {
                 System.out.print(prompt);
@@ -249,22 +309,35 @@ public class AvailabilityClient {
                 switch (command){
                     case "1":
                         getAvailableProducts(availability, fw);
+                        System.out.println("> To show commands enter list.");
                         break;
 
                     case "2":
                         getRequestedProducts(availability, fw);
+                        System.out.println("> To show commands enter list.");
                         break;
-
+                    
                     case "3":
-                        setProductRequest(availability, host, serverPort, username, fw);
+                        getProductAvailability(availability, fw);
+                        System.out.println("> To show commands enter list.");
                         break;
-
+                        
                     case "4":
-                        setAvailableProduct(availability, host, serverPort, fw);
+                        setProductRequest(availability, host, serverPort, username, fw);
+                        System.out.println("> To show commands enter list.");
                         break;
 
+                    case "5":
+                        setAvailableProduct(availability, host, serverPort, fw);
+                        System.out.println("> To show commands enter list.");
+                        break;
+
+                    case "list":
+                        listCommands();
+                        break;
+                        
                     case "q":
-                        System.out.println("Stay safe!");
+                        System.out.println("> Stay safe!");
                         fw.close();
                         deleteFile(session);
                         System.exit(0);

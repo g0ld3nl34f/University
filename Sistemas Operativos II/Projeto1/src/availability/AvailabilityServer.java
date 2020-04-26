@@ -16,64 +16,24 @@ import java.util.*;
 public class AvailabilityServer {
     public AvailabilityServer() {}
     
-    private static HashMap<String, Socket> getUserData() {
-        File data = new File("userdata");
-        
-        try {
-            if (data.createNewFile()) {
-                System.out.println("User data file created.");
-            
-                return null;
-            }
-        }
-        
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        try {
-            FileInputStream fis = new FileInputStream(data);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-        
-            HashMap<String, Socket> users = (HashMap<String, Socket>) ois.readObject();
-            
-            System.out.println("User data retrieved.");
-            
-            ois.close();
-            fis.close();
-            
-            return users;
-        }
-        
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        return null;
-    }
-    
-    
-    //method for concurrent request notification
-    
     public static void main(String args[]) {
         //Initialize remote object invocation here
-        /*if (args.length != 1){
-            System.out.println("Need to especify registryPort: java availability.AvailabilityServer registryPort");
+        if (args.length != 2){
+            System.out.println("Need to especify registryPort and serverPort: java availability.AvailabilityServer registryPort serverPort");
             System.exit(1);
-        }*/
+        }
         
         try {
-            int regPort = 9000;//Integer.parseInt(args[0]);
-            int serverPort = 8000;
+            int regPort = Integer.parseInt(args[0]);
+            int serverPort = Integer.parseInt(args[1]);
             
-            String host = "localhost";
-            String db = "availbd";
-            String user = "availserver";
-            String pw = "password";
+            PropertyValues pv = new PropertyValues("server_database.properties");
+            Properties info = pv.getPropertiesValues();
+            
+            String host = info.getProperty("host");
+            String db = info.getProperty("db");
+            String user = info.getProperty("user");
+            String pw = info.getProperty("pw");
             
             Availability obj = new AvailabilityImpl(host, db, user, pw);
             
@@ -84,6 +44,9 @@ public class AvailabilityServer {
             registry.rebind("availability", obj);
             
             System.out.println("Remote object ready!"); 
+            
+            obj.initializeAvailabilityDataBase();
+            obj.initializeRequestsDataBase();
             
             HashMap<String, Socket> userData = new HashMap<String, Socket>();
             System.out.println("Userdata ready");
@@ -141,4 +104,37 @@ public class AvailabilityServer {
         }
     }
             
+}
+
+class PropertyValues {
+    String filename;
+    
+    public PropertyValues(String filename) {
+        this.filename = filename;
+    }
+    
+    public Properties getPropertiesValues() {
+        try {
+            Properties prop = new Properties();
+            
+            InputStream is = getClass().getClassLoader().getResourceAsStream(filename);
+            
+            if (is != null) {
+                prop.load(is);
+                System.out.println("Properties file loaded.");
+                return prop;
+            }
+            
+            else {
+                System.out.println("Properties file not found.");
+                return null;
+            }
+        }
+        
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
 }

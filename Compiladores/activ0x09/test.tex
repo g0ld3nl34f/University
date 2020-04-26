@@ -1,0 +1,35 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{tikz-qtree}
+\usetikzlibrary{shadows,trees}
+\begin{document}
+\tikzset{font=\small,
+level distance=.8cm,
+every node/.style=
+    {color=white,
+    rectangle,rounded corners,
+    align=center,
+    text = black
+    },
+edge from parent/.style=
+    {draw=blue,
+    thick
+    }}
+
+\centering
+\begin{tikzpicture}
+\Tree [.program [.decls [.decl [.ids [.exp [.id $a$ ] ]
+ ]
+[.type [.exp [.id $str$ ] ]
+ ]
+[.exp [.op $+$ ] [.exp [.string $"SOMA\ "$ ] ]
+[.exp [.int $2$ ] ]
+ ]
+ ]
+[.\emph{empty} ] ]
+ ]
+\end{tikzpicture}
+\end{document}

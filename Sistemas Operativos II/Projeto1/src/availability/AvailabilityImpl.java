@@ -21,6 +21,50 @@ public class AvailabilityImpl extends UnicastRemoteObject implements Availabilit
         this.db = new DatabaseConnector(host, db, user, pw);
     }
     
+    /**
+     * Initialize availability database
+     * 
+     * @throws java.rmi.RemoteException
+     */
+    @Override
+    public void initializeAvailabilityDataBase() throws java.rmi.RemoteException{
+        try {
+            db.connect();
+            Statement stmt = db.getStatement();
+            
+            stmt.execute("create table availability(product varchar(50), shop varchar(50))");
+            
+            db.disconnect();
+        }
+        
+        catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Problem initializing availability database");
+        }
+    }
+    
+    /**
+     * Initialize requests database
+     * 
+     * @throws java.rmi.RemoteException
+     */
+    @Override
+    public void initializeRequestsDataBase() throws java.rmi.RemoteException {
+        try {
+            db.connect();
+            Statement stmt = db.getStatement();
+            
+            stmt.execute("create table requests(requestid varchar(50), product varchar(50))");
+            
+            db.disconnect();
+        }
+        
+        catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Problem initializing requests database");
+        }
+    }
+    
     /*************************************************************************************************/
     
     /**
@@ -29,6 +73,7 @@ public class AvailabilityImpl extends UnicastRemoteObject implements Availabilit
      * @return
      * @throws java.rmi.RemoteException
      */
+    @Override
     public Vector<String> checkAvailability() throws java.rmi.RemoteException {
         Vector<String> request = new Vector();
         
@@ -132,7 +177,7 @@ public class AvailabilityImpl extends UnicastRemoteObject implements Availabilit
     }
     
     /**
-     * 
+     * Check if given product is available
      * 
      * @param product
      * @return
@@ -162,7 +207,7 @@ public class AvailabilityImpl extends UnicastRemoteObject implements Availabilit
     }
     
     /**
-     * 
+     * Returns shops where a given product is available
      * 
      * @param product
      * @return
@@ -196,14 +241,14 @@ public class AvailabilityImpl extends UnicastRemoteObject implements Availabilit
         
         catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Problems retrieving product necessities from database");
+            System.err.println("Problems retrieving shops where the given product is available from database");
         }
         
         return null;
     }
     
     /**
-     * 
+     * Update requests table with new request
      * 
      * @param requestID
      * @throws java.rmi.RemoteException
@@ -226,7 +271,7 @@ public class AvailabilityImpl extends UnicastRemoteObject implements Availabilit
     }
     
     /**
-     * 
+     * Return all requests in requests table
      * 
      * @param product
      * @return
@@ -239,7 +284,6 @@ public class AvailabilityImpl extends UnicastRemoteObject implements Availabilit
         try {
             db.connect();
             Statement stmt = db.getStatement();
-            System.out.println("reach here");
             ResultSet rs = stmt.executeQuery("select requestid from requests where product = '" + product + "'");
             
             while (!rs.isClosed() && rs.next()) {
